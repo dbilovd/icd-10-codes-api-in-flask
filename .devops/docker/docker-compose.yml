@@ -1,0 +1,19 @@
+version: '3.7'
+
+networks:
+  flask:
+
+services:
+  web:
+    build:
+      context: ./../../
+      dockerfile: .devops/docker/Dockerfile
+    command: python manage.py runserver -h 0.0.0.0
+    volumes: 
+      - ./../../:/usr/src
+    ports:
+      - "5000:5000"
+    networks: 
+      - flask
+    env_file: 
+      - ./../../.env
