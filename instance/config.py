@@ -4,6 +4,7 @@ import os
 class Config(object):
   DEBUG = False
   TESTING = False
+  SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL')
 
 # Development Config Class
 class DevelopmentConfig(Config):

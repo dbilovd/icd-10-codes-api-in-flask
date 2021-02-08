@@ -1,2 +1,2 @@
 cd .devops/docker
-docker-compose restart -d
+docker-compose restart

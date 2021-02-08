@@ -4,6 +4,20 @@ networks:
   flask:
 
 services:
+  db:
+    image: postgres:13-alpine
+    restart: always
+    volumes:
+      - ./../postgres_data:/var/lib/postgres/data
+    expose: 
+      - "5432"
+    environment: 
+      - POSTGRES_USER=docker
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_DB=ocd_10_api_db
+    networks: 
+      - flask
+
   web:
     build:
       context: ./../../
@@ -17,3 +31,5 @@ services:
       - flask
     env_file: 
       - ./../../.env
+    depends_on: 
+      - db
