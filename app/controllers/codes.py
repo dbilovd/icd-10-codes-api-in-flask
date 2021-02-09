@@ -76,3 +76,20 @@ def update_an_existing_code(id):
       data=code.__repr__(),
       status_code=200
   )
+
+@codes_controller.route("/<id>", methods=["DELETE"])
+def delete_an_existing_code(id):
+  code = Code.query.get(id)
+  if code is None:
+    return respond(
+      status_code=404,
+      message=f'Code with id {id} was not found.'
+    )
+
+  code.delete()
+
+  return respond(
+      data=code.__repr__(),
+      status_code=200,
+      message=f'Code with id {id} deleted successfully.'
+  )

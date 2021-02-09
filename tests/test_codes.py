@@ -143,3 +143,15 @@ class CodesTest(unittest.TestCase):
     self.assertNotEqual(updated_code.title, code_title)
     self.assertEqual(updated_code.code, updates.code)
     self.assertEqual(updated_code.title, updates.title)
+
+  def test_codes_destroy_can_remove_a_record_from_the_database(self):
+    code = CodeFactory.create()
+    code.save()
+    
+    response = self.client().delete(f'/codes/{code.id}')
+    self.assertEqual(response.status_code, 200)
+
+    self.assertIsNone(Code.query.get(code.id))
+
+    response = self.client().delete(f'/codes/{code.id}')
+    self.assertEqual(response.status_code, 404)
