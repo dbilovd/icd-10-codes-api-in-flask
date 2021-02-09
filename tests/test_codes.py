@@ -94,6 +94,24 @@ class CodesTest(unittest.TestCase):
     schema = self.json_schema_from_file("code.json")
     validate(response_json, schema=schema)
   
+  def test_codes_store_can_create_a_new_code_in_with_a_parent_id(self):
+    parent_code = CodeFactory.create()
+    parent_code.save()
+    parent_code_id = parent_code.id
+    code = CodeFactory.build()
+    response = self.client().post("/codes/", data={
+      'code': code.code,
+      'title': code.title,
+      'parentCodeId': parent_code_id
+    })
+    self.assertEqual(response.status_code, 201)
+
+    response_json = response.json
+    
+    schema = self.json_schema_from_file("code.json")
+    validate(response_json, schema=schema)
+    self.assertEqual(response_json["data"]['parentCodeId'], parent_code_id)
+  
   def test_codes_store_returns_a_400_error_for_missing_code_in_request(self):
     code = CodeFactory.build()
 

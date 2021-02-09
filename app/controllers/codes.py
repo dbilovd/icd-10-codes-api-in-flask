@@ -38,6 +38,7 @@ def fetch_all_codes():
 def store_a_new_code():
   request_code = request.data.get("code")
   request_title = request.data.get("title")
+  request_parent_id = request.data.get("parentCodeId")
 
   if request_code is None or request_title is None:
     return respond(
@@ -45,8 +46,26 @@ def store_a_new_code():
       message='Invalid Data Provided'
     )
 
-  code = Code(code=request_code, title=request_title)
-  code.save()
+  parent_code = None
+  print("parent code id", request_parent_id)
+  if request_parent_id is not None:
+    parent_code = Code.query.get(request_parent_id)
+    if parent_code is None:
+      return respond(
+        status_code=400,
+        message='Invalid Parent Code ID Provided.'
+      )
+
+  code = Code(
+    code=request_code,
+    title=request_title,
+  )
+
+  if parent_code is not None:
+    parent_code.subcodes.append(code)
+    parent_code.save()
+  else:
+    code.save()
 
   return respond(
     data=code.__repr__(),

@@ -9,9 +9,13 @@
     },
     "data": {
       "type": "object",
+      "required": ["codeId", "code", "title"],
       "properties": {
         "codeId": {
           "type": "number"
+        },
+        "parentCodeId": {
+          "type": ["number", "null"]
         },
         "code": {
           "type": ["string", "number"]
