@@ -1,10 +1,10 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, request
 from app.models.code import Code
+from . import respond
 
 codes_controller = Blueprint('codes', __name__)
 
-
-@codes_controller.route("/")
+@codes_controller.route("/", methods=["GET"])
 def fetch_all_codes():
   page_to_fetch = request.data.get("page")
   
@@ -20,21 +20,35 @@ def fetch_all_codes():
         code.__repr__()
       )
   
-  response_data = {
-    'responseCode': 200,
-    'responseMessage': 'Success',
-    'data': formatted_codes,
-    'meta': {
-      'totalPages': paginator.pages,
-      'totalItems': paginator.total,
-      'itemsPerPage': paginator.per_page,
-      'currentPage': paginator.page,
-      'previousPage': paginator.prev_num,
-      'nextPage': paginator.next_num,
-    }
+  meta = {
+    'totalPages': paginator.pages,
+    'totalItems': paginator.total,
+    'itemsPerPage': paginator.per_page,
+    'currentPage': paginator.page,
+    'previousPage': paginator.prev_num,
+    'nextPage': paginator.next_num,
   }
 
-  response = jsonify(response_data)
-  response.status_code = 200
+  return respond(
+    data=formatted_codes,
+    meta=meta
+  )
 
-  return response
+@codes_controller.route("/", methods=["POST"])
+def store_a_new_code():
+  request_code = request.data.get("code")
+  request_title = request.data.get("title")
+
+  if request_code is None or request_title is None:
+    return respond(
+      status_code=400,
+      message='Invalid Data Provided'
+    )
+
+  code = Code(code=request_code, title=request_title)
+  code.save()
+
+  return respond(
+    data=code.__repr__(),
+    status_code=201
+  )

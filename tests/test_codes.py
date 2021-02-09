@@ -79,3 +79,34 @@ class CodesTest(unittest.TestCase):
 
     response = self.client().get("/codes/?page=2")
     self.assertEqual(response.status_code, 404)
+  
+  def test_codes_store_creates_a_new_code_in_db(self):
+    code = CodeFactory.build()
+
+    response = self.client().post("/codes/", data={
+      'code': code.code,
+      'title': code.title
+    })
+    self.assertEqual(response.status_code, 201)
+
+    response_json = response.json
+    
+    schema = self.json_schema_from_file("code.json")
+    validate(response_json, schema=schema)
+  
+  def test_codes_store_returns_a_400_error_for_missing_code_in_request(self):
+    code = CodeFactory.build()
+
+    response = self.client().post("/codes/", data={
+      'title': code.title
+    })
+    self.assertEqual(response.status_code, 400)
+  
+  def test_codes_store_returns_a_400_error_for_missing_title_in_request(self):
+    code = CodeFactory.build()
+
+    response = self.client().post("/codes/", data={
+      'code': code.code
+    })
+    self.assertEqual(response.status_code, 400)
+

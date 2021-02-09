@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "responseCode": {
+      "type": "number"
+    },
+    "responseMessage": {
+      "type": "string"
+    },
+    "data": {
+      "type": "object",
+      "properties": {
+        "codeId": {
+          "type": "number"
+        },
+        "code": {
+          "type": ["string", "number"]
+        },
+        "title": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
