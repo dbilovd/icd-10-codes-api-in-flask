@@ -1,0 +1,41 @@
+{
+  "type": "object",
+  "required": [ "data", "meta" ],
+  "properties": {
+    "responseCode": {
+      "type": "number"
+    },
+    "responseMessage": {
+      "type": "string"
+    },
+    "data": {
+      "type": "array"
+    },
+    "meta": {
+      "type": "object",
+      "required": [
+        "totalPages", "totalItems", "itemsPerPage", "currentPage", "previousPage", "nextPage"
+      ],
+      "properties": {
+        "totalPages": {
+          "type": "number"
+        },
+        "totalItems": {
+          "type": "number"
+        },
+        "itemsPerPage": {
+          "type": "number"
+        },
+        "currentPage": {
+          "type": "number"
+        },
+        "previousPage": {
+          "type": ["number", "null"]
+        },
+        "nextPage": {
+          "type": ["number", "null"]
+        }
+      }
+    }
+  }
+}
