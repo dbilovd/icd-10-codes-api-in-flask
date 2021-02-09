@@ -6,3 +6,4 @@ flask-migrate
 python-dotenv
 jsonschema
 factory_boy
+flake8
