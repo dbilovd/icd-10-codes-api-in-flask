@@ -110,3 +110,36 @@ class CodesTest(unittest.TestCase):
     })
     self.assertEqual(response.status_code, 400)
 
+  def test_codes_update_returns_a_404_error_for_a_codeid_that_does_not_exist(self):
+    response = self.client().patch(
+      f'/codes/456788',
+      data={}
+    )
+    self.assertEqual(response.status_code, 404)
+
+  def test_codes_update_can_update_an_existing_code_record(self):
+    code = CodeFactory.create()
+    code_code = code.code
+    code_title = code.title
+    code.save()
+
+    updates = CodeFactory.build()
+    
+    response = self.client().patch(
+      f'/codes/{code.id}', 
+      data={
+        'code': updates.code,
+        'title': updates.title
+      }
+    )
+    self.assertEqual(response.status_code, 200)
+    response_json = response.json
+
+    schema = self.json_schema_from_file("code.json")
+    validate(response_json, schema=schema)
+
+    updated_code = Code.query.get(code.id)
+    self.assertNotEqual(updated_code.code, code_code)
+    self.assertNotEqual(updated_code.title, code_title)
+    self.assertEqual(updated_code.code, updates.code)
+    self.assertEqual(updated_code.title, updates.title)

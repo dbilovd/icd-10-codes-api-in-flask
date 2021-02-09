@@ -2,8 +2,8 @@ from flask import jsonify
 
 def respond(data=None, status_code=200, message='Success', meta=None):
   results = {
-      'responseCode': status_code,
-      'responseMessage': message,
+    'responseCode': status_code,
+    'responseMessage': message,
   }
 
   if data:

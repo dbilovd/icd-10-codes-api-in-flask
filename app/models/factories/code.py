@@ -10,5 +10,5 @@ class CodeFactory(factory.alchemy.SQLAlchemyModelFactory):
     model = Code
     sqlalchemy_session = db.session
   
-  code = fake.bothify(text='?###', letters='ABCD')
-  title = fake.paragraph()
+  code = factory.Sequence(lambda n: fake.bothify(text='?###', letters='ABCD'))
+  title = factory.Sequence(lambda n: fake.sentence())
