@@ -72,6 +72,20 @@ def store_a_new_code():
     status_code=201
   )
 
+@codes_controller.route("/<id>", methods=["GET"])
+def fetch_an_existing_code(id):
+  code = Code.query.get(id)
+  if code is None:
+    return respond(
+      status_code=404,
+      message=f'Code with id {id} was not found.'
+    )
+
+  return respond(
+      data=code.__repr__(),
+      status_code=200
+  )
+
 @codes_controller.route("/<id>", methods=["PATCH", "PUT"])
 def update_an_existing_code(id):
   code = Code.query.get(id)
