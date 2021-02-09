@@ -3,9 +3,7 @@ from instance.config import app_config
 from app.controllers.home import home_controller
 from app.controllers.codes import codes_controller
 
-def create_app(config_name):
-  # Set default config to use
-  config_name = "development" if config_name == None else config_name
+def create_app(config_name='development'):
 
   # Create application
   app = FlaskAPI(__name__, instance_relative_config=True)
@@ -13,7 +11,7 @@ def create_app(config_name):
   app.config.from_pyfile('config.py')
 
   # Setup DB
-  app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+  app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
   from app.models import db
   db.init_app(app)

@@ -8,9 +8,9 @@ from app.models import db
 app = create_app(
   config_name=os.getenv('FLASK_ENV')
 )
+
 manager = Manager(app)
 migrate = Migrate(app, db)
-
 manager.add_command('db', MigrateCommand)
 
 @manager.command
